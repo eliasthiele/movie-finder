@@ -13,10 +13,5 @@
 
 .movie img {
     width: 185px;
-    height: auto;
-    object-fit: cover;
-}
-
-.movie h3 {
-    margin-top: 0;
+    height: 278px;
 }
