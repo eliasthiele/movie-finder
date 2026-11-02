@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Movie Finder</h1>
+
+    <form id="searchForm">
+        <div class="genre-section">
+            <div class="genre-input-row">
+                <label for="genres">Genres</label>
+                <input
+                    type="text"
+                    id="genres"
+                    placeholder="Type a genre..."
+                >
+
+                <button type="button" id="addGenre">Add</button>
+            </div>
+
+            <div id="selectedGenres" class="selected-genres"></div>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="origin">Origin country</label>
+            <input
+                type="text"
+                id="origin"
+                placeholder="US"
+            >
+        </div>
+
+        <br>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Results</h2>
+    <div id="results">
+        <p>No results yet.</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

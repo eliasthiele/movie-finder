@@ -1,0 +1,22 @@
+.selected-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.movie {
+    display: flex;
+    gap: 16px;
+    padding: 12px;
+    max-width: 600px;
+}
+
+.movie img {
+    width: 185px;
+    height: auto;
+    object-fit: cover;
+}
+
+.movie h3 {
+    margin-top: 0;
+}

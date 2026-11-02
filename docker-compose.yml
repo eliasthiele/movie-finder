@@ -1,0 +1,7 @@
+services:
+  api:
+    build: .
+    ports:
+      - 9001:9001
+    environment:
+      - TMDB_TOKEN=${TMDB_TOKEN}
