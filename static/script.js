@@ -62,6 +62,22 @@ form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const origin = document.getElementById("origin").value.trim();
+    const director = document.getElementById("director").value.trim();
+
+    var directorId = 0;
+    if (director) {
+        try {
+        const response = await fetch(`/director?with_crew=${director}`);
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+        const data = await response.json();
+        directorId = data.results[0].id
+        } catch (error) {
+        results.textContent = "Error: " + error.message;
+        }
+    }
+    
     const params = new URLSearchParams();
 
     if (selectedGenres.length > 0) {
@@ -70,6 +86,10 @@ form.addEventListener("submit", async (event) => {
 
     if (origin) {
         params.set("with_origin_country", origin);
+    }
+
+    if (directorId) {
+        params.set("with_crew", directorId)
     }
 
     results.textContent = "Loading...";
@@ -82,7 +102,6 @@ form.addEventListener("submit", async (event) => {
         }
 
         const data = await response.json();
-        //results.textContent = JSON.stringify(data, null, 2);
         renderMovies(data.results);
 
     } catch (error) {

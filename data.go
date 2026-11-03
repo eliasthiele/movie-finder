@@ -37,3 +37,12 @@ type Movie struct {
     VoteAverage float64 `json:"vote_average"`
     Synopsis    string  `json:"overview"`
 }
+
+type DirectorResponse struct {
+    Results []Director `json:"results"`
+}
+
+type Director struct {
+    ID   int    `json:"id"`
+    Name string `json:"name"`
+}

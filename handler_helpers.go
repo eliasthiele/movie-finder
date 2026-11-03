@@ -25,6 +25,9 @@ func parseParams(p url.Values) (url.Values, error) {
 		}
 		params.Add("with_origin_country", originCode)
 	}
+	if directorId := p.Get("with_crew"); directorId != "" {
+		params.Add("with_crew", directorId)
+	}
 	return params, nil
 }
 
