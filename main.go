@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"log"
 	"fmt"
+	"os"
 )
 
 func main() {
@@ -13,6 +14,7 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	fmt.Println("Listening on port 9001")
-	log.Fatal(http.ListenAndServe(":9001", nil))
+	port := os.GetEnv("PORT")
+	fmt.Println("Listening on port", port)
+	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
 }
