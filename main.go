@@ -14,7 +14,7 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	port := os.GetEnv("PORT")
+	port := os.Getenv("PORT")
 	fmt.Println("Listening on port", port)
 	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
 }
