@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"log"
-	"fmt"
 	"os"
 )
 
@@ -15,6 +14,10 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
 	port := os.Getenv("PORT")
-	fmt.Println("Listening on port", port)
-	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
+	if port == "" {
+		port = "9001"
+	}
+	address := "0.0.0.0:"+port
+	log.Printf("Listening on port %s", address)
+	log.Fatal(http.ListenAndServe(address, nil))
 }
