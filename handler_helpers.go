@@ -28,6 +28,9 @@ func parseParams(p url.Values) (url.Values, error) {
 	if directorId := p.Get("with_crew"); directorId != "" {
 		params.Add("with_crew", directorId)
 	}
+	if primaryReleaseYear := p.Get("primary_release_year"); primaryReleaseYear != "" {
+		params.Add("primary_release_year", primaryReleaseYear)
+	}
 	return params, nil
 }
 

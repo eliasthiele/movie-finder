@@ -63,6 +63,7 @@ form.addEventListener("submit", async (event) => {
 
     const origin = document.getElementById("origin").value.trim();
     const director = document.getElementById("director").value.trim();
+    const releaseYear = document.getElementById("year").value;
 
     var directorId = 0;
     if (director) {
@@ -92,6 +93,11 @@ form.addEventListener("submit", async (event) => {
         params.set("with_crew", directorId)
     }
 
+    if (releaseYear) {
+        params.set("primary_release_year", releaseYear)
+    }
+
+    console.log("Parameters:", params.toString());
     results.textContent = "Loading...";
 
     try {
