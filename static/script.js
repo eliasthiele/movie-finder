@@ -64,33 +64,26 @@ form.addEventListener("submit", async (event) => {
     const origin = document.getElementById("origin").value.trim();
     const director = document.getElementById("director").value.trim();
     const releaseYear = document.getElementById("year").value;
+    const actor = document.getElementById("actor").value.trim();
 
-    var directorId = 0;
-    if (director) {
-        try {
-        const response = await fetch(`/director?with_crew=${director}`);
-        if (!response.ok) {
-            throw new Error(await response.text());
-        }
-        const data = await response.json();
-        directorId = data.results[0].id
-        } catch (error) {
-        results.textContent = "Error: " + error.message;
-        }
-    }
-    
     const params = new URLSearchParams();
 
+    if (director) {
+        var directorID = await fetchPersonID(director);
+        params.set("with_crew", directorID)
+    }
+
+    if (actor) {
+        var actorID = await fetchPersonID(actor);
+        params.set("with_cast", actorID)
+    }
+    
     if (selectedGenres.length > 0) {
         params.set("with_genres", selectedGenres.join(","));
     }
 
     if (origin) {
         params.set("with_origin_country", origin);
-    }
-
-    if (directorId) {
-        params.set("with_crew", directorId)
     }
 
     if (releaseYear) {
@@ -159,4 +152,19 @@ function renderMovies(movies) {
         // Add the movie to the results container
         results.appendChild(movieElement);
     });
+}
+
+async function fetchPersonID(name) {
+    var personID = 0;
+    try {
+        const response = await fetch(`/person?person=${name}`);
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+        const data = await response.json();
+        personID = data.results[0].id
+        } catch (error) {
+        results.textContent = "Error: " + error.message;
+    }
+    return personID;
 }

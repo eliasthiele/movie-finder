@@ -38,11 +38,11 @@ type Movie struct {
     Synopsis    string  `json:"overview"`
 }
 
-type DirectorResponse struct {
-    Results []Director `json:"results"`
+type PersonResponse struct {
+    Results []Person `json:"results"`
 }
 
-type Director struct {
+type Person struct {
     ID   int    `json:"id"`
     Name string `json:"name"`
 }

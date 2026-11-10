@@ -9,7 +9,7 @@ import (
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	http.HandleFunc("/recs", recsHandler)
-	http.HandleFunc("/director", directorHandler)
+	http.HandleFunc("/person", personHandler)
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 

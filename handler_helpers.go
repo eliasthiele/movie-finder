@@ -12,11 +12,11 @@ func parseParams(p url.Values) (url.Values, error) {
 	params := url.Values{}
 	if genres := p.Get("with_genres"); genres != "" {
 		log.Println(genres)
-		genreIds, err := replaceGenres(genres)
+		genreIDs, err := replaceGenres(genres)
 		if err != nil {
 			return nil, err
 		}
-		params.Add("with_genres", genreIds)
+		params.Add("with_genres", genreIDs)
 	}
 	if origin := p.Get("with_origin_country"); origin != "" {
 		originCode, err := replaceCountry(origin)
@@ -25,8 +25,11 @@ func parseParams(p url.Values) (url.Values, error) {
 		}
 		params.Add("with_origin_country", originCode)
 	}
-	if directorId := p.Get("with_crew"); directorId != "" {
-		params.Add("with_crew", directorId)
+	if directorID := p.Get("with_crew"); directorID != "" {
+		params.Add("with_crew", directorID)
+	}
+	if actorID := p.Get("with_cast"); actorID != "" {
+		params.Add("with_cast", actorID)
 	}
 	if primaryReleaseYear := p.Get("primary_release_year"); primaryReleaseYear != "" {
 		params.Add("primary_release_year", primaryReleaseYear)
