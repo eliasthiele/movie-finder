@@ -65,6 +65,8 @@ form.addEventListener("submit", async (event) => {
     const director = document.getElementById("director").value.trim();
     const releaseYear = document.getElementById("year").value;
     const actor = document.getElementById("actor").value.trim();
+    const maxRuntime = document.getElementById("maxRuntime").value;
+    const minRuntime = document.getElementById("minRuntime").value;
 
     const params = new URLSearchParams();
 
@@ -88,6 +90,14 @@ form.addEventListener("submit", async (event) => {
 
     if (releaseYear) {
         params.set("primary_release_year", releaseYear)
+    }
+
+    if (maxRuntime) {
+        params.set("maxRuntime", maxRuntime)
+    }
+
+    if (minRuntime) {
+        params.set("minRuntime", minRuntime)
     }
 
     console.log("Parameters:", params.toString());

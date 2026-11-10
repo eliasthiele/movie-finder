@@ -34,6 +34,12 @@ func parseParams(p url.Values) (url.Values, error) {
 	if primaryReleaseYear := p.Get("primary_release_year"); primaryReleaseYear != "" {
 		params.Add("primary_release_year", primaryReleaseYear)
 	}
+	if maxRuntime := p.Get("maxRuntime"); maxRuntime != "" {
+		params.Add("with_runtime.lte", maxRuntime)
+	}
+	if minRuntime := p.Get("minRuntime"); minRuntime != "" {
+		params.Add("with_runtime.gte", minRuntime)
+	}
 	return params, nil
 }
 
