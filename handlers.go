@@ -45,6 +45,13 @@ func recsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
+	if directorID := urlParams.Get("with_crew"); directorID != "" {
+		err := filterByDirector(&response, directorID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(resp.StatusCode)
 	err = json.NewEncoder(w).Encode(response)

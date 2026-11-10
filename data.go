@@ -46,3 +46,12 @@ type Person struct {
     ID   int    `json:"id"`
     Name string `json:"name"`
 }
+
+type CreditsResponse struct {
+    Credits []Credit `json:"crew"`
+}
+
+type Credit struct {
+    ID  int    `json:"id"`
+    Job string `json:"job"`
+}
