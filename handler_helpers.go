@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"net/url"
-	"log"
+	//"log"
 	"strings"
 	"fmt"
 	"github.com/biter777/countries"
@@ -14,7 +14,6 @@ import (
 func parseParams(p url.Values) (url.Values, error) {
 	params := url.Values{}
 	if genres := p.Get("with_genres"); genres != "" {
-		log.Println(genres)
 		genreIDs, err := replaceGenres(genres)
 		if err != nil { return nil, err }
 		params.Add("with_genres", genreIDs)
@@ -43,7 +42,6 @@ func parseParams(p url.Values) (url.Values, error) {
 }
 
 func replaceGenres(s string) (string, error) {
-	log.Printf("Genre string received=%s", s)
 	genres := strings.Split(s, ",")
 	ids := make([]string, 0, len(genres))
 	for _, genre := range genres {
@@ -63,21 +61,9 @@ func replaceCountry(s string) (string, error) {
 
 func filterByDirector(dr *DiscoverResponse, directorID string) error {
 	url := fmt.Sprintf("https://api.themoviedb.org/3/person/%s/movie_credits", directorID)
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil { return err }
-	token := os.Getenv("TMDB_TOKEN")
-	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Accept", "application/json")
-
-	log.Printf("person/{id}/movie_credits url=%s", req.URL.String())
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil { return err }
-	defer resp.Body.Close()
 
 	var response CreditsResponse
-	err = json.NewDecoder(resp.Body).Decode(&response)
+	err := callTMDB(url, &response)
 	if err != nil { return err }
 
 	directedFilmIDs := make(map[int]struct{})
@@ -95,6 +81,26 @@ func filterByDirector(dr *DiscoverResponse, directorID string) error {
 	}
 
 	dr.Results = filteredMovies
+
+	return nil
+}
+
+// out should be a pointer to a struct
+func callTMDB(url string, out any) error {
+	token := os.Getenv("TMDB_TOKEN")
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil { return err }
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil { return err }
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(out)
+	if err != nil { return err }
 
 	return nil
 }
