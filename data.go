@@ -30,12 +30,14 @@ type DiscoverResponse struct {
 }
 
 type Movie struct {
-    ID          int     `json:"id"`
-    Title       string  `json:"title"`
-    ReleaseDate string  `json:"release_date"`  
-    PosterPath  string  `json:"poster_path"`
-    VoteAverage float64 `json:"vote_average"`
-    Synopsis    string  `json:"overview"`
+    ID          int      `json:"id"`
+    Title       string   `json:"title"`
+    ReleaseDate string   `json:"release_date"`  
+    PosterPath  string   `json:"poster_path"`
+    VoteAverage float64  `json:"vote_average"`
+    Synopsis    string   `json:"overview"`
+    Runtime     int      `json:"runtime,omitempty"`
+    Genres      []string `json:"genres,omitempty"`
 }
 
 type PersonResponse struct {
@@ -54,4 +56,13 @@ type CreditsResponse struct {
 type Credit struct {
     ID  int    `json:"id"`
     Job string `json:"job"`
+}
+
+type ExtraMovieDetails struct {
+    Runtime int     `json:"runtime"`
+    Genres  []Genre `json:"genres"`
+}
+
+type Genre struct {
+    Name string `json:"name"`
 }

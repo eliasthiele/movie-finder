@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/biter777/countries"
 	"os"
+	"strconv"
 )
 
 func parseParams(p url.Values) (url.Values, error) {
@@ -82,6 +83,28 @@ func filterByDirector(dr *DiscoverResponse, directorID string) error {
 
 	dr.Results = filteredMovies
 
+	return nil
+}
+
+func addMovieInfo(dr *DiscoverResponse) error {
+	baseUrl := "https://api.themoviedb.org/3/movie/"
+	idToDetails := make(map[int]ExtraMovieDetails)
+	for _, movie := range dr.Results {
+		details := ExtraMovieDetails{}
+		err := callTMDB(baseUrl+strconv.Itoa(movie.ID), &details)
+		if err != nil { return err }
+		idToDetails[movie.ID] = details
+	}
+	for i := range dr.Results {
+		movie := &dr.Results[i]
+		details := idToDetails[movie.ID]
+		movie.Runtime = details.Runtime
+		for _, genre := range details.Genres {
+			movie.Genres = append(movie.Genres, genre.Name)
+		}
+	
+	}
+	
 	return nil
 }
 

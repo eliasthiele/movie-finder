@@ -27,7 +27,15 @@ func recsHandler(w http.ResponseWriter, r *http.Request) {
 		err := filterByDirector(&response, directorID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+	}
+
+	err = addMovieInfo(&response)
+	log.Printf("Response: %+v", response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-type", "application/json")
@@ -46,6 +54,10 @@ func personHandler(w http.ResponseWriter, r *http.Request) {
 
 	var response PersonResponse
 	err := callTMDB(url, &response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	w.Header().Set("Content-type", "application/json")
 	err = json.NewEncoder(w).Encode(response)

@@ -152,11 +152,17 @@ function renderMovies(movies) {
         const rating = document.createElement("p");
         rating.textContent = `Rating: ${movie.vote_average}/10`;
 
+        const runtime = document.createElement("p");
+        runtime.textContent = `${movie.runtime} minutes`;
+
+        const genres = document.createElement("p");
+        genres.textContent = movie.genres.join(", ");
+
         const synopsis = document.createElement("p");
         synopsis.textContent = `${movie.overview}`
 
         // Put everything together
-        info.append(title, releaseDate, rating, synopsis);
+        info.append(title, releaseDate, rating, runtime, genres, synopsis);
         movieElement.append(poster, info);
 
         // Add the movie to the results container
