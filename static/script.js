@@ -158,7 +158,7 @@ function renderMovies(movies) {
 
         const releaseDate = makeLine("Released:", movie.release_date || "Unknown");
 
-        const rating = makeLine("Rating:", `${movie.vote_average}/10`);
+        const rating = makeLine("TMDB rating:", `${movie.vote_average.toFixed(1)}`);
 
         const directors = (movie.crew ?? []).map(person => person.name);
         const crew = makeLine("Directed by:", directors.join(", ") || "Unknown");
