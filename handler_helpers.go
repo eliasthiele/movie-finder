@@ -63,14 +63,14 @@ func replaceCountry(s string) (string, error) {
 func filterByDirector(dr *DiscoverResponse, directorID string) error {
 	url := fmt.Sprintf("https://api.themoviedb.org/3/person/%s/movie_credits", directorID)
 
-	var response CreditsResponse
+	var response DirectorCreditsResponse
 	err := callTMDB(url, &response)
 	if err != nil { return err }
 
 	directedFilmIDs := make(map[int]struct{})
-	for _, credit := range response.Credits {
-		if credit.Job == "Director" {
-			directedFilmIDs[credit.ID] = struct{}{}
+	for _, person := range response.Credits {
+		if person.Job == "Director" {
+			directedFilmIDs[person.ID] = struct{}{}
 		}
 	}
 
@@ -89,20 +89,37 @@ func filterByDirector(dr *DiscoverResponse, directorID string) error {
 func addMovieInfo(dr *DiscoverResponse) error {
 	baseUrl := "https://api.themoviedb.org/3/movie/"
 	idToDetails := make(map[int]ExtraMovieDetails)
+
 	for _, movie := range dr.Results {
 		details := ExtraMovieDetails{}
-		err := callTMDB(baseUrl+strconv.Itoa(movie.ID), &details)
+		err := callTMDB(baseUrl+strconv.Itoa(movie.ID)+"?append_to_response=credits", &details)
 		if err != nil { return err }
 		idToDetails[movie.ID] = details
 	}
 	for i := range dr.Results {
 		movie := &dr.Results[i]
 		details := idToDetails[movie.ID]
+
 		movie.Runtime = details.Runtime
+
 		for _, genre := range details.Genres {
 			movie.Genres = append(movie.Genres, genre.Name)
 		}
-	
+
+		crew := make([]Person, 0)
+		for _, person := range details.Credits.Crew {
+			if person.Job == "Director" {
+				crew = append(crew, person)
+			}
+		}
+		movie.Crew = crew
+
+		cast := make([]Person, 0)
+		stop := min(3, len(details.Credits.Cast))
+		for i := range details.Credits.Cast[:stop] {
+			cast = append(cast, details.Credits.Cast[i])
+		}
+		movie.Cast = cast
 	}
 	
 	return nil

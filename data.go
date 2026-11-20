@@ -38,6 +38,8 @@ type Movie struct {
     Synopsis    string   `json:"overview"`
     Runtime     int      `json:"runtime,omitempty"`
     Genres      []string `json:"genres,omitempty"`
+    Cast        []Person `json:"cast,omitempty"`
+    Crew        []Person `json:"crew"`
 }
 
 type PersonResponse struct {
@@ -47,22 +49,24 @@ type PersonResponse struct {
 type Person struct {
     ID   int    `json:"id"`
     Name string `json:"name"`
+    Job  string `json:"job,omitempty"`
 }
 
-type CreditsResponse struct {
-    Credits []Credit `json:"crew"`
-}
-
-type Credit struct {
-    ID  int    `json:"id"`
-    Job string `json:"job"`
+type DirectorCreditsResponse struct {
+    Credits []Person `json:"crew"`
 }
 
 type ExtraMovieDetails struct {
     Runtime int     `json:"runtime"`
     Genres  []Genre `json:"genres"`
+    Credits Credits `json:"credits"`
 }
 
 type Genre struct {
     Name string `json:"name"`
+}
+
+type Credits struct {
+    Cast []Person `json:"cast"`
+    Crew []Person `json:"crew"`
 }
