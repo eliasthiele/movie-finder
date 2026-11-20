@@ -1,4 +1,3 @@
-
 const form = document.getElementById("searchForm");
 const results = document.getElementById("results");
 const genreInput = document.getElementById("genres");
@@ -46,6 +45,7 @@ function renderGenres() {
         const removeButton = document.createElement("button");
         removeButton.type = "button";
         removeButton.textContent = "×";
+        removeButton.setAttribute("aria-label", `Remove ${genre}`);
 
         removeButton.addEventListener("click", () => {
             selectedGenres = selectedGenres.filter(g => g !== genre);
@@ -79,7 +79,7 @@ form.addEventListener("submit", async (event) => {
         var actorID = await fetchPersonID(actor);
         params.set("with_cast", actorID)
     }
-    
+
     if (selectedGenres.length > 0) {
         params.set("with_genres", selectedGenres.join(","));
     }
@@ -118,19 +118,28 @@ form.addEventListener("submit", async (event) => {
     }
 });
 
+// Builds <p><strong>Label</strong> value</p>
+function makeLine(label, value) {
+    const p = document.createElement("p");
+    const strong = document.createElement("strong");
+    strong.textContent = label + " ";
+    p.append(strong, value);
+    return p;
+}
+
 function renderMovies(movies) {
     results.replaceChildren();
-    if (movies.length === 0) {
+    if (!movies || movies.length === 0) {
         results.textContent = "No movies found.";
         return;
     }
 
     movies.forEach(movie => {
-        // Create the movie container
+        // Create the movie card
         const movieElement = document.createElement("div");
         movieElement.className = "movie";
 
-        // Create the poster
+        // Poster
         const poster = document.createElement("img");
 
         if (movie.poster_path) {
@@ -140,38 +149,41 @@ function renderMovies(movies) {
             poster.alt = "No poster available";
         }
 
-        // Create the movie information
+        // Details column
         const info = document.createElement("div");
+        info.className = "movie-info";
 
         const title = document.createElement("h3");
         title.textContent = movie.title;
 
-        const releaseDate = document.createElement("p");
-        releaseDate.textContent = `Release date: ${movie.release_date || "Unknown"}`;
+        const releaseDate = makeLine("Released:", movie.release_date || "Unknown");
 
-        const rating = document.createElement("p");
-        rating.textContent = `Rating: ${movie.vote_average}/10`;
+        const rating = makeLine("Rating:", `${movie.vote_average}/10`);
 
-        const crewNames = movie.crew.map(person => person.name);
-        const crew = document.createElement("p");
-        crew.textContent = `Directed by: ${crewNames.join(", ")}`;
+        const directors = (movie.crew ?? []).map(person => person.name);
+        const crew = makeLine("Directed by:", directors.join(", ") || "Unknown");
 
-        const castNames = movie.cast.map(person => person.name);
-        const cast = document.createElement("p");
-        cast.textContent = `Starring: ${castNames.join(", ")}`;
+        const actors = (movie.cast ?? []).map(person => person.name);
+        const cast = makeLine("Starring:", actors.join(", ") || "Unknown");
 
-        const runtime = document.createElement("p");
-        runtime.textContent = `${movie.runtime} minutes`;
+        info.append(title, releaseDate, rating, crew, cast);
+
+        // Runtime is 0 when TMDB has no value, so only show real ones
+        if (movie.runtime > 0) {
+            info.appendChild(makeLine("Runtime:", `${movie.runtime} minutes`));
+        }
 
         const genres = document.createElement("p");
-        genres.textContent = movie.genres.join(", ");
+        genres.className = "genres";
+        genres.textContent = (movie.genres ?? []).join(", ");
+        info.appendChild(genres);
 
+        // Synopsis is its own column, so it goes next to info, not inside it
         const synopsis = document.createElement("p");
-        synopsis.textContent = `${movie.overview}`
+        synopsis.className = "movie-synopsis";
+        synopsis.textContent = movie.overview || "No synopsis available.";
 
-        // Put everything together
-        info.append(title, releaseDate, rating, crew, cast, runtime, genres, synopsis);
-        movieElement.append(poster, info);
+        movieElement.append(poster, info, synopsis);
 
         // Add the movie to the results container
         results.appendChild(movieElement);
@@ -181,13 +193,13 @@ function renderMovies(movies) {
 async function fetchPersonID(name) {
     var personID = 0;
     try {
-        const response = await fetch(`/person?person=${name}`);
+        const response = await fetch(`/person?person=${encodeURIComponent(name)}`);
         if (!response.ok) {
             throw new Error(await response.text());
         }
         const data = await response.json();
         personID = data.results[0].id
-        } catch (error) {
+    } catch (error) {
         results.textContent = "Error: " + error.message;
     }
     return personID;

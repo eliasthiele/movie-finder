@@ -1,112 +1,106 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Movie Finder</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Movie Finder</h1>
+    <main class="page">
+        <header class="site-header">
+            <h1>Movie Finder</h1>
+            <p>Narrow down films by genre, country, cast, crew, year and runtime.</p>
+        </header>
 
-    <form id="searchForm">
-        <!--Genre-->
-        <div class="genre-section">
-            <div class="genre-input-row">
+        <form id="searchForm" class="search-card">
+            <!--Genre-->
+            <div class="field field-wide genre-section">
                 <label for="genres">Genres</label>
-                <input
-                    type="text"
-                    id="genres"
-                    placeholder="Comedy"
-                >
-
-                <button type="button" id="addGenre">Add</button>
+                <div class="genre-input-row">
+                    <input
+                        type="text"
+                        id="genres"
+                        placeholder="Comedy"
+                    >
+                    <button type="button" id="addGenre">Add</button>
+                </div>
+                <p class="hint">Press Enter or Add to include each genre.</p>
+                <div id="selectedGenres" class="selected-genres"></div>
             </div>
 
-            <div id="selectedGenres" class="selected-genres"></div>
-        </div>
+            <!--Director-->
+            <div class="field">
+                <label for="director">Director</label>
+                <input
+                    type="text"
+                    id="director"
+                    placeholder="Mike Leigh"
+                >
+            </div>
 
-        <br>
+            <!--Actor-->
+            <div class="field">
+                <label for="actor">Actor</label>
+                <input
+                    type="text"
+                    id="actor"
+                    placeholder="Susumu Terajima"
+                >
+            </div>
 
-        <!--Country-->
-        <div>
-            <label for="origin">Origin country</label>
-            <input
-                type="text"
-                id="origin"
-                placeholder="United Kingdom"
-            >
-        </div>
+            <!--Country-->
+            <div class="field">
+                <label for="origin">Origin country</label>
+                <input
+                    type="text"
+                    id="origin"
+                    placeholder="United Kingdom"
+                >
+            </div>
 
-        <br>
+            <!--Year-->
+            <div class="field">
+                <label for="year">Release year</label>
+                <input
+                    type="number"
+                    id="year"
+                    placeholder="1970"
+                >
+            </div>
 
-        <!--Director-->
-        <div>
-            <label for="director">Director</label>
-            <input
-                type="text"
-                id="director"
-                placeholder="Mike Leigh"
-            >
-        </div>
+            <!--Min runtime-->
+            <div class="field">
+                <label for="minRuntime">Min runtime (minutes)</label>
+                <input
+                    type="number"
+                    id="minRuntime"
+                    placeholder="15"
+                >
+            </div>
 
-        <br>
+            <!--Max runtime-->
+            <div class="field">
+                <label for="maxRuntime">Max runtime (minutes)</label>
+                <input
+                    type="number"
+                    id="maxRuntime"
+                    placeholder="95"
+                >
+            </div>
 
-        <!--Actor-->
-        <div>
-            <label for="actor">Actor</label>
-            <input
-                type="text"
-                id="actor"
-                placeholder="Susumu Terajima"
-            >
-        </div>
+            <div class="form-actions">
+                <button type="submit">Search</button>
+            </div>
+        </form>
 
-        <br> 
-
-        <!--Year-->
-        <div>
-            <label for="year">Release year</label>
-            <input
-                type="number"
-                id="year"
-                placeholder="1970"
-            >
-        </div>
-
-        <br> 
-
-         <!--Min runtime-->
-        <div>
-            <label for="minRuntime">Min runtime (minutes)</label>
-            <input
-                type="number"
-                id="minRuntime"
-                placeholder="15"
-            >
-        </div>
-
-        <br>
-
-        <!--Max runtime-->
-        <div>
-            <label for="maxRuntime">Max runtime (minutes)</label>
-            <input
-                type="number"
-                id="maxRuntime"
-                placeholder="95"
-            >
-        </div>
-
-        <br> 
-
-        <button type="submit">Search</button>
-    </form>
-
-    <h2>Results</h2>
-    <div id="results">
-        <p>No results yet.</p>
-    </div>
+        <section class="results-section">
+            <h2>Results</h2>
+            <div id="results">
+                <p>Choose some filters and press Search to see movies.</p>
+            </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
